@@ -6,7 +6,7 @@ var v1 = require('./routes/v1');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost/ninjahippo');
+mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/ninjahippo');
 
 app.use('/', routes);
 app.use('/v1', v1);
@@ -36,7 +36,8 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
+    res.renprocess.env.MONGOLAB_URI || 
+  process.env.MONGOHQ_URL || der('error', {
         message: err.message,
         error: {}
     });
