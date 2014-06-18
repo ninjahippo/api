@@ -123,9 +123,12 @@ router.put('/sites', function(req, res) {
 })
 
 router.get('/sites/:slug', function(req, res) {
-  Site.findOne({
+  Site.findOne(req.query.application_token !== undefined ? {
     slug: req.params.slug,
     application_token: req.query.application_token
+  } : {
+    slug: req.params.slug,
+    api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
       res.json(200, {
@@ -144,9 +147,12 @@ router.get('/sites/:slug', function(req, res) {
 });
 
 router.get('/sites/:site_slug/pages', function(req, res) {
-  Site.findOne({
-    slug: req.params.site_slug,
+  Site.findOne(req.query.application_token !== undefined ? {
+    slug: req.params.slug,
     application_token: req.query.application_token
+  } : {
+    slug: req.params.slug,
+    api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
       Page.find({
@@ -175,9 +181,12 @@ router.get('/sites/:site_slug/pages', function(req, res) {
 });
 
 router.get('/sites/:site_slug/pages/:slug', function(req, res) {
-  Site.findOne({
-    slug: req.params.site_slug,
+  Site.findOne(req.query.application_token !== undefined ? {
+    slug: req.params.slug,
     application_token: req.query.application_token
+  } : {
+    slug: req.params.slug,
+    api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
       Page.findOne({
