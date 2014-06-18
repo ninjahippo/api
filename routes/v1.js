@@ -9,9 +9,7 @@ router.get('/sites', function(req, res) {
     api_token: req.query.api_token
   }, function(err, docs) {
     if(!err) {
-      res.json(200, { 
-        sites: docs 
-      });
+      res.json(200, docs);
     } else {
       res.json(500, { 
         message: err 
@@ -131,9 +129,7 @@ router.get('/sites/:slug', function(req, res) {
     api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
-      res.json(200, {
-        site: doc
-      });
+      res.json(200, doc);
     } else if (!err) {
       res.json(404, {
         message: 'Site not found.'
@@ -159,9 +155,7 @@ router.get('/sites/:site_slug/pages', function(req, res) {
         site_slug: req.params.site_slug
       }, function(err, doc) {
         if (!err) {
-          res.json(200, {
-            pages: doc
-          });
+          res.json(200, doc);
         } else {
           res.json(500, {
             message: err
@@ -194,9 +188,7 @@ router.get('/sites/:site_slug/pages/:slug', function(req, res) {
         slug: req.params.slug
       }, function(err, doc) {
         if (!err) {
-          res.json(200, {
-            page: doc
-          });
+          res.json(200, doc);
         } else {
           res.json(500, {
             message: err
