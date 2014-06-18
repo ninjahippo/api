@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var cors = require('cors')
+var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var v1 = require('./routes/v1');
@@ -9,6 +10,8 @@ var app = express();
 
 mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/ninjahippo');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.use(cors());
 
 app.use('/', routes);

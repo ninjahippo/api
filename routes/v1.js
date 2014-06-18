@@ -20,11 +20,11 @@ router.get('/sites', function(req, res) {
 
 router.post('/sites', function(req, res) {
   var site = {
-    title: req.body.site_title,
-    url: req.body.site_url,
+    title: req.body.title,
+    url: req.body.url,
     app_token: undefined,
-    api_token: req.body.site_api_token,
-    slug: req.body.site_title.trim().replace(/[^a-zA-Z0-9-\s]/g, '').replace(/[^a-zA-Z0-9-]/g, '_').toLowerCase()
+    api_token: req.query.api_token,
+    slug: req.body.title.trim().replace(/[^a-zA-Z0-9-\s]/g, '').replace(/[^a-zA-Z0-9-]/g, '_').toLowerCase()
   }
 
   crypto.randomBytes(24, function(ex, buf) {
@@ -95,12 +95,12 @@ router.put('/sites', function(req, res) {
     api_token: req.body.api_token
   }, function(err, doc) {
     if (!err && doc) {
-      doc.title = req.body.site_title;
-      doc.url = req.body.site_url;
+      doc.title = req.body.title;
+      doc.url = req.body.url;
       doc.save(function(err) {
         if (!err) {
           res.json(200, {
-            message: 'Site updated: ' + req.body.site_title
+            message: 'Site updated: ' + req.body.title
           });
         } else {
           res.json(500, {
@@ -144,10 +144,10 @@ router.get('/sites/:slug', function(req, res) {
 
 router.get('/sites/:site_slug/pages', function(req, res) {
   Site.findOne(req.query.application_token !== undefined ? {
-    slug: req.params.slug,
+    slug: req.params.site_slug,
     application_token: req.query.application_token
   } : {
-    slug: req.params.slug,
+    slug: req.params.site_slug,
     api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
@@ -176,10 +176,10 @@ router.get('/sites/:site_slug/pages', function(req, res) {
 
 router.get('/sites/:site_slug/pages/:slug', function(req, res) {
   Site.findOne(req.query.application_token !== undefined ? {
-    slug: req.params.slug,
+    slug: req.params.site_slug,
     application_token: req.query.application_token
   } : {
-    slug: req.params.slug,
+    slug: req.params.site_slug,
     api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
@@ -213,16 +213,16 @@ router.post('/sites/:site_slug/pages', function(req, res) {
     api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
-      Page.find({
-        slug: req.params.site_slug,
+      Page.findOne({
+        title: req.body.title,
         site_slug: req.params.site_slug
       }, function(err, doc) {
         if (!err && !doc) {
           var page = {
-            title: req.body.page_title,
-            html: req.body.page_html,
+            title: req.body.title,
+            html: req.body.html,
             site_slug: req.params.site_slug,
-            slug: req.body.page_title.trim().replace(/[^a-zA-Z0-9-\s]/g, '').replace(/[^a-zA-Z0-9-]/g, '_').toLowerCase()
+            slug: req.body.title.trim().replace(/[^a-zA-Z0-9-\s]/g, '').replace(/[^a-zA-Z0-9-]/g, '_').toLowerCase()
           }
 
           var newPage = new Page();
@@ -275,12 +275,12 @@ router.put('/sites/:site_slug/pages', function(req, res) {
         slug: req.body.slug
       }, function(err, doc) {
         if (!err && doc) {
-          doc.title = req.body.page_title;
+          doc.title = req.body.title;
           doc.html = req.body.page_html;
           doc.save(function(err) {
             if (!err) {
               res.json(200, {
-                message: 'Page updated: ' + req.body.page_title
+                message: 'Page updated: ' + req.body.title
               });
             } else {
               res.json(500, {
