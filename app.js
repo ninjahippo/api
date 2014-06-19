@@ -24,7 +24,7 @@ app.use(function(req, res, next) {
         }
     }
 
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-CSRF-TOKEN')
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-CSRF-TOKEN, Content-Type')
 
     if (t) {
         res.header('Access-Control-Max-Age', 60 * 60 * 24 * 365);
