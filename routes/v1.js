@@ -218,7 +218,7 @@ router.route('/sites/:site_slug/pages')
       }, function(err, doc) {
         if (!err && doc) {
           doc.title = req.body.title;
-          doc.html = req.body.page_html;
+          doc.html = req.body.html;
           doc.save(function(err) {
             if (!err) {
               res.json(200, {
