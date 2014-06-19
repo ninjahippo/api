@@ -69,7 +69,7 @@ router.route('/sites')
 .delete(function(req, res) {
   Site.findOne({
     slug: req.body.slug,
-    api_token: req.body.api_token
+    api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
       doc.remove();
@@ -90,7 +90,7 @@ router.route('/sites')
 .put(function(req, res) {
   Site.findOne({
     slug: req.body.slug,
-    api_token: req.body.api_token
+    api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
       doc.title = req.body.title;
@@ -209,7 +209,7 @@ router.route('/sites/:site_slug/pages')
 .put(function(req, res) {
   Site.findOne({
     slug: req.params.site_slug,
-    api_token: req.body.api_token
+    api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
       Page.findOne({
