@@ -1,6 +1,5 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var cors = require('cors')
 var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
@@ -12,7 +11,6 @@ mongoose.connect(process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
-app.use(cors());
 
 app.use('/', routes);
 app.use('/v1', v1);

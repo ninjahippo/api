@@ -3,8 +3,20 @@ var router = express.Router();
 var Site = require('../models/site').Site;
 var Page = require('../models/page').Page;
 var crypto = require('crypto');
+var cors = require('cors');
 
-router.get('/sites', function(req, res) {
+// router.use(cors({
+//   origin: 'http://cms.ninjahippo.io',
+//   methods: 'PUT,POST,DELETE'
+// }));
+
+router.use(cors({
+  origin: true
+  // methods: 'GET'
+}));
+
+router.route('/sites')
+.get(function(req, res) {
   Site.find({
     api_token: req.query.api_token
   }, function(err, docs) {
@@ -16,9 +28,8 @@ router.get('/sites', function(req, res) {
       });
     }
   });
-});
-
-router.post('/sites', function(req, res) {
+})
+.post(function(req, res) {
   var site = {
     title: req.body.title,
     url: req.body.url,
@@ -65,9 +76,8 @@ router.post('/sites', function(req, res) {
       });
     }
   });
-});
-
-router.delete('/sites', function(req, res) {
+})
+.delete(function(req, res) {
   Site.findOne({
     slug: req.body.slug,
     api_token: req.body.api_token
@@ -87,9 +97,8 @@ router.delete('/sites', function(req, res) {
       });
     }
   });
-});
-
-router.put('/sites', function(req, res) {
+})
+.put(function(req, res) {
   Site.findOne({
     slug: req.body.slug,
     api_token: req.body.api_token
@@ -120,29 +129,8 @@ router.put('/sites', function(req, res) {
   });
 })
 
-router.get('/sites/:slug', function(req, res) {
-  Site.findOne(req.query.application_token !== undefined ? {
-    slug: req.params.slug,
-    application_token: req.query.application_token
-  } : {
-    slug: req.params.slug,
-    api_token: req.query.api_token
-  }, function(err, doc) {
-    if (!err && doc) {
-      res.json(200, doc);
-    } else if (!err) {
-      res.json(404, {
-        message: 'Site not found.'
-      });
-    } else {
-      res.json(403, {
-        message: 'Could not find site. Error: ' + err
-      });
-    }
-  });
-});
-
-router.get('/sites/:site_slug/pages', function(req, res) {
+router.route('/sites/:site_slug/pages')
+.get(function(req, res) {
   Site.findOne(req.query.application_token !== undefined ? {
     slug: req.params.site_slug,
     application_token: req.query.application_token
@@ -172,42 +160,8 @@ router.get('/sites/:site_slug/pages', function(req, res) {
       });
     }
   });
-});
-
-router.get('/sites/:site_slug/pages/:slug', function(req, res) {
-  Site.findOne(req.query.application_token !== undefined ? {
-    slug: req.params.site_slug,
-    application_token: req.query.application_token
-  } : {
-    slug: req.params.site_slug,
-    api_token: req.query.api_token
-  }, function(err, doc) {
-    if (!err && doc) {
-      Page.findOne({
-        site_slug: req.params.site_slug,
-        slug: req.params.slug
-      }, function(err, doc) {
-        if (!err) {
-          res.json(200, doc);
-        } else {
-          res.json(500, {
-            message: err
-          });
-        }
-      });
-    } else if (!err) {
-      res.json(404, {
-        message: 'Site not found.'
-      });
-    } else {
-      res.json(403, {
-        message: 'Could not find site. Error: ' + err
-      });
-    }
-  });
-});
-
-router.post('/sites/:site_slug/pages', function(req, res) {
+})
+.post(function(req, res) {
   Site.findOne({
     slug: req.params.site_slug,
     api_token: req.query.api_token
@@ -262,9 +216,8 @@ router.post('/sites/:site_slug/pages', function(req, res) {
       });
     }
   });
-});
-
-router.put('/sites/:site_slug/pages', function(req, res) {
+})
+.put(function(req, res) {
   Site.findOne({
     slug: req.params.site_slug,
     api_token: req.body.api_token
@@ -301,8 +254,7 @@ router.put('/sites/:site_slug/pages', function(req, res) {
     }
   });
 })
-
-router.delete('/sites/:site_slug/pages', function(req, res) {
+.delete(function(req, res) {
   Site.findOne({
     slug: req.params.site_slug,
     api_token: req.query.api_token
@@ -314,6 +266,61 @@ router.delete('/sites/:site_slug/pages', function(req, res) {
       })
     }
   })
+});
+
+router.get('/sites/:slug', function(req, res) {
+  Site.findOne(req.query.application_token !== undefined ? {
+    slug: req.params.slug,
+    application_token: req.query.application_token
+  } : {
+    slug: req.params.slug,
+    api_token: req.query.api_token
+  }, function(err, doc) {
+    if (!err && doc) {
+      res.json(200, doc);
+    } else if (!err) {
+      res.json(404, {
+        message: 'Site not found.'
+      });
+    } else {
+      res.json(403, {
+        message: 'Could not find site. Error: ' + err
+      });
+    }
+  });
+});
+
+router.get('/sites/:site_slug/pages/:slug', function(req, res) {
+  Site.findOne(req.query.application_token !== undefined ? {
+    slug: req.params.site_slug,
+    application_token: req.query.application_token
+  } : {
+    slug: req.params.site_slug,
+    api_token: req.query.api_token
+  }, function(err, doc) {
+    if (!err && doc) {
+      Page.findOne({
+        site_slug: req.params.site_slug,
+        slug: req.params.slug
+      }, function(err, doc) {
+        if (!err) {
+          res.json(200, doc);
+        } else {
+          res.json(500, {
+            message: err
+          });
+        }
+      });
+    } else if (!err) {
+      res.json(404, {
+        message: 'Site not found.'
+      });
+    } else {
+      res.json(403, {
+        message: 'Could not find site. Error: ' + err
+      });
+    }
+  });
 });
 
 module.exports = router;
