@@ -3,17 +3,6 @@ var router = express.Router();
 var Site = require('../models/site').Site;
 var Page = require('../models/page').Page;
 var crypto = require('crypto');
-var cors = require('cors');
-
-// router.use(cors({
-//   origin: 'http://cms.ninjahippo.io',
-//   methods: 'PUT,POST,DELETE'
-// }));
-
-router.use(cors({
-  origin: true
-  // methods: 'GET'
-}));
 
 router.route('/sites')
 .get(function(req, res) {
