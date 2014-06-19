@@ -46,9 +46,7 @@ router.route('/sites')
 
       newSite.save(function(err) {
         if (!err) {
-          res.json(201, {
-            message: 'Site created with title: ' + newSite.title
-          });
+          res.json(201, newSite);
         } else {
           res.json(500, {
             message: 'Could not create site. Error: ' + err
@@ -176,9 +174,7 @@ router.route('/sites/:site_slug/pages')
 
           newPage.save(function(err) {
             if (!err) {
-              res.json(201, {
-                message: 'Page created with title: ' + newPage.title
-              });
+              res.json(201, newPage);
             } else {
               res.json(500, {
                 message: 'Could not create site. Error: ' + err
