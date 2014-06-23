@@ -14,15 +14,15 @@ app.use(bodyParser.urlencoded());
 
 app.use(function(req, res, next) {
     var t = false;
-    // if (req.headers.origin) {
-    //     if (req.headers.origin == 'http://cms.ninjahippo.io') {
-    //         res.header('Access-Control-Allow-Origin', 'http://cms.ninjahippo.io');
+    if (req.headers.origin) {
+        if (req.headers.origin == 'http://cms.ninjahippo.io') {
+            res.header('Access-Control-Allow-Origin', 'http://cms.ninjahippo.io');
             res.header('Access-Control-Allow-Methods', 'OPTIONS, PUT, POST, DELETE, GET');
-        // } else {
+        } else {
             res.header('Access-Control-Allow-Origin', '*');
-    //         res.header('Access-Control-Allow-Methods', 'OPTIONS, GET');
-    //     }
-    // }
+            res.header('Access-Control-Allow-Methods', 'OPTIONS, GET');
+        }
+    }
 
     res.header('Access-Control-Allow-Headers', 'X-Requested-With, X-CSRF-TOKEN, Content-Type')
 
