@@ -15,6 +15,10 @@ var pageSchema = new Schema({
       type: String,
       required: true
     },
+    deletable: {
+      type: Boolean,
+      default: true
+    },
     slug: {
       type: String,
       required: true

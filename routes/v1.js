@@ -51,6 +51,15 @@ router.route('/sites')
 
         newSite.save(function(err) {
           if (!err) {
+
+            var newPage = new Page();
+            newPage.title = 'Index';
+            newPage.slug = 'index';
+            newPage.site_slug = newSite.slug;
+            newPage.html = '<div class="container"><h1>Hello World</h1><p>Welcome to the Ninjahippo CMS!</p></div>';
+            newPage.deletable = false;
+            newPage.save();
+
             res.json(201, newSite);
           } else {
             res.json(500, {
@@ -280,10 +289,16 @@ router.route('/sites/:site_slug/pages')
         slug: req.query.slug
       }, function(err, doc) {
         if (!err && doc) {
-          doc.remove();
-          res.json(200, {
-            message: 'Page removed.'
-          });
+          if (doc.deletable) {
+            doc.remove();
+            res.json(200, {
+              message: 'Page removed.'
+            });
+          } else {
+            res.json(403, {
+              message: 'Page undeletable.'
+            });
+          }
         } else if (!err) {
           res.json(404, {
             message: 'Page not found.'
