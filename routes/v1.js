@@ -71,8 +71,11 @@ router.route('/sites')
   }
 })
 .delete(function(req, res) {
-  Site.findOne({
+  Site.findOne(req.body.slug ? {
     slug: req.body.slug,
+    api_token: req.query.api_token
+  } : {
+    slug: req.query.slug,
     api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
@@ -269,12 +272,38 @@ router.route('/sites/:site_slug/pages')
     api_token: req.query.api_token
   }, function(err, doc) {
     if (!err && doc) {
-      Page.findOne({
-        slug: req.body.slug,
-        site_slug: req.params.site_slug 
+      Page.findOne(req.body.slug ? {
+        site_slug: req.params.site_slug,
+        slug: req.body.slug
+      } : {
+        site_slug: req.params.site_slug,
+        slug: req.query.slug
+      }, function(err, doc) {
+        if (!err && doc) {
+          doc.remove();
+          res.json(200, {
+            message: 'Page removed.'
+          });
+        } else if (!err) {
+          res.json(404, {
+            message: 'Page not found.'
+          });
+        } else {
+          res.json(403, {
+            message: 'Could not delete page. Error: ' + err
+          });
+        }
       })
+    } else if (!err) {
+      res.json(404, {
+        message: 'Site not found.'
+      });
+    } else {
+      res.json(403, {
+        message: 'Could not delete site. Error: ' + err
+      });
     }
-  })
+  });
 });
 
 router.get('/sites/:slug', function(req, res) {
